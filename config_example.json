@@ -1,0 +1,27 @@
+{
+  "config": {
+    "writer": {
+      "type": "stdout",
+      "n_writers": 2
+    },
+    "resources": [
+      {
+        "reader": "tail",
+        "processor": "plaintologstash",
+        "n_processors": 2,
+        "resource": "/tmp/testgrigori89833.log",
+        "maxlines": 33
+      },
+      {
+        "reader": "tail",
+        "processor": "plaintologstash",
+        "n_processors": 2,
+        "resource": "/tmp/testgrigori77263.log"
+      }
+    ],
+    "position_keeper": {
+      "type": "file",
+      "path": "/tmp/test_grigori_position_keeper.pos4"
+    }
+  }
+}

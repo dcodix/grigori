@@ -1,0 +1,50 @@
+package main
+
+import (
+	"github.com/dcodix/grigori/lib/domain/message"
+	"github.com/dcodix/grigori/lib/infrastructure/writer/writer_redis"
+	"testing"
+	"time"
+	"gopkg.in/redis.v2"
+)
+
+func TestReaderWriterRedis(test *testing.T) {
+	messages := make(chan message.Message, 1000)
+
+	var messageSend message.Message
+	messageSend.Message = "test"
+
+	writer := new(writer_redis.WriterRedis)
+
+
+	redis_host := "172.17.0.1"
+	redis_port := "6379"
+	redis_key := "test_grigori_980749hsj"
+	config := make(map[string]interface{})
+	config["redis_host"] = redis_host
+	config["redis_port"] = redis_port
+	config["redis_key"] = redis_key
+	writer.Config(config)
+
+	go func() {
+		writer.Write(messages)
+	}()
+
+	messages <- messageSend
+time.Sleep(300 * time.Microsecond)
+	    var opt redis.Options
+
+    opt.Addr = redis_host+":"+redis_port
+    opt.Network = "tcp"
+    client := redis.NewClient(&opt)
+    inredis := client.LPop(redis_key)
+    readedMessage, _ := inredis.Result()
+    if readedMessage != messageSend.Message {
+    	test.Error("Message readed differs from message sended.")
+    	test.Error(readedMessage)
+    }
+ 
+ 	client.Del(redis_key)
+
+	close(messages)
+}
