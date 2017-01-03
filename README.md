@@ -6,7 +6,9 @@ The original idea is to have a "shipper" kind of logstash shipper. So, read from
 
 ##Goals
 1) Learn some golang myself
+
 2) Try to use a DDD like with golang (that's the reason for the strange code structure)
+
 3) Learn how to test with golang
 
 ##Motivation
